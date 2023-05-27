@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import * as userConfig from "config";
-
+import * as fs from "fs";
 (global as any).fetch = fetch;
 
 import {
@@ -8,6 +8,7 @@ import {
   startGatewayServer,
 } from "./server/authGatewayServer";
 import { starOutConfidentalFields } from "./utils";
+import { merge } from "lodash";
 
 const DEFAULT_CONFIG_FILE = ".web-auth-gateway.json";
 
@@ -27,7 +28,8 @@ function readDefaultCliOptions(): Partial<AuthGatewayServerOptions> {
 }
 
 // TODO: read config & other things
-const config: Partial<AuthGatewayServerOptions> = readDefaultCliOptions();
+const localConfigFile: Partial<AuthGatewayServerOptions> =
+  readDefaultCliOptions();
 
 for (const ce of userConfig.util.getConfigSources()) {
   console.log("using config from: %s", ce.name);
@@ -36,6 +38,8 @@ console.log(
   "actual config: %s",
   JSON.stringify(starOutConfidentalFields(userConfig.util.toObject()), null, 2)
 );
+
+const config = merge(userConfig, localConfigFile);
 
 if (!config.session?.secret) {
   console.log(

@@ -1,0 +1,27 @@
+{
+  "appUrl": "APP_URL",
+  "server": {
+    "host": "HOST",
+    "port": "PORT"
+  },
+  "upstream": "UPSTREAM_URL",
+  "google": {
+    "clientId": "GOOGLE_CLIENT_ID",
+    "appSecret": "GOOGLE_APP_SECRET"
+  },
+  "github": {
+    "clientId": "GITHUB_CLIENT_ID",
+    "clientSecret": "GITHUB_CLIENT_SECRET"
+  },
+  "email": {
+    "fromAddress": "EMAIL_FROM_ADDRESS",
+    "smtp": {
+      "host": "EMAIL_SMTP_HOST",
+      "port": "EMAIL_SMTP_PORT",
+      "auth": {
+        "user": "EMAIL_SMTP_AUTH_USER",
+        "password": "EMAIL_SMTP_AUTH_PASSWORD"
+      }
+    }
+  }
+}

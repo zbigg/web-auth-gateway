@@ -1,0 +1,12 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": "8080"
+  },
+  "email": {
+    "smtp": {
+      "port": 587
+    }
+  },
+  "deriveAppUrlFromHeaders": true
+}

@@ -1,6 +1,20 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { ClientCommonProps } from "../clientMain";
 import { OAuth2Params } from "../common";
+
+function miniStyled<T extends React.ElementType>(
+  component: T,
+  staticStyle: React.CSSProperties
+) {
+  const Component = component as any;
+  return ({ children, style, ...props }: ComponentProps<T>) => (
+    <Component style={{ ...staticStyle, ...style }} {...props}>
+      {children}
+    </Component>
+  );
+}
+
+const WarningHeader = miniStyled("h4", { color: "orange" });
 
 export type LoginPageDedicatedProps = {
   providers: {
@@ -44,9 +58,9 @@ export function LoginPage({
       <div>
         <div style={{ textAlign: "center" }}>
           {appTitle && <h2>{appTitle}</h2>}
-          <h4 style={{ color: "orange" }}>
+          <WarningHeader>
             Access is restricted to authenticated users only.
-          </h4>
+          </WarningHeader>
         </div>
       </div>
       <div

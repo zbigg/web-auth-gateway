@@ -13,8 +13,9 @@ export interface OAuthTokenSet {
   identityToken?: string;
 }
 
+export type SocialProviderType = "facebook" | "github" | "google" | "microsoft";
 export interface SocialProvider {
-  type: "facebook" | "github" | "google" | "microsoft";
+  type: SocialProviderType;
 
   getClientOAuthParams(): OAuth2Params;
   consumeCode(req: express.Request): Promise<OAuthTokenSet>;

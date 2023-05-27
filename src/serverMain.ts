@@ -12,10 +12,13 @@ import { merge } from "lodash";
 
 const DEFAULT_CONFIG_FILE = ".web-auth-gateway.json";
 
-function readDefaultCliOptions(): Partial<AuthGatewayServerOptions> {
+function readDefaultCliOptions(): [
+  Partial<AuthGatewayServerOptions>,
+  string | undefined
+] {
   let optionsRaw: any;
   if (!fs.existsSync(DEFAULT_CONFIG_FILE)) {
-    return {};
+    return [{}, undefined];
   }
   try {
     optionsRaw = fs.readFileSync(DEFAULT_CONFIG_FILE, "utf-8");
@@ -24,22 +27,24 @@ function readDefaultCliOptions(): Partial<AuthGatewayServerOptions> {
       `unable to read config from '${DEFAULT_CONFIG_FILE}': ${error}`
     );
   }
-  return JSON.parse(optionsRaw);
+  return [JSON.parse(optionsRaw), DEFAULT_CONFIG_FILE];
 }
 
 // TODO: read config & other things
-const localConfigFile: Partial<AuthGatewayServerOptions> =
-  readDefaultCliOptions();
+const [localConfig, localConfigFile] = readDefaultCliOptions();
 
-for (const ce of userConfig.util.getConfigSources()) {
+for (const ce of [
+  ...userConfig.util.getConfigSources(),
+  { name: localConfigFile },
+].filter((cs) => cs.name)) {
   console.log("using config from: %s", ce.name);
 }
+
+const config = merge(userConfig, localConfig);
 console.log(
   "actual config: %s",
-  JSON.stringify(starOutConfidentalFields(userConfig.util.toObject()), null, 2)
+  JSON.stringify(starOutConfidentalFields(config.util.toObject()), null, 2)
 );
-
-const config = merge(userConfig, localConfigFile);
 
 if (!config.session?.secret) {
   console.log(

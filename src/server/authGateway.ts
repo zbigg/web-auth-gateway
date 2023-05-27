@@ -19,6 +19,7 @@ import {
 import {
   consumeOauthResultHandler,
   SocialProvider,
+  SocialProviderType,
 } from "./authenticateSocial";
 import { createAuthorizer } from "./authorize";
 import { allHeaderValues, lastHeaderValue, splitOnFirst } from "../utils";
@@ -120,7 +121,7 @@ export function createAuthGatewayRouter(config: AuthGatewayConfig) {
               authState: req.session.authState,
             };
             return r;
-          }, {} as Record<"facebook" | "github" | "google", OAuth2Params>),
+          }, {} as Record<SocialProviderType, OAuth2Params>),
         },
         step: String(req.query.step),
         enteredEmail: String(req.query.enteredEmail),
@@ -143,6 +144,7 @@ export function createAuthGatewayRouter(config: AuthGatewayConfig) {
   router.get("/client-config", (req, res) => {
     res.status(200).json(getClientProps(req)).end();
   });
+
   router.get("/me", (req, res) => {
     res
       .status(200)
@@ -168,6 +170,12 @@ export function createAuthGatewayRouter(config: AuthGatewayConfig) {
         )
       )
       .end();
+  });
+
+  router.get("/logout", (req, res) => {
+    req.session._ageu = undefined;
+    res.redirect(302, "/");
+    res.end();
   });
 
   for (const provider of oAuthProviders) {

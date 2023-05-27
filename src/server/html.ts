@@ -14,6 +14,11 @@ export function renderHtmlPage(content: string, title: string) {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title id="page-title">${title} - Auth Gateway</title>
         <link rel="stylesheet" href="/_auth-gateway/static/pico.min.css">
+        <style>
+          :root {
+            --font-size: 12px;
+          }
+        </style>
       </head>
       <body>
         ${content}
